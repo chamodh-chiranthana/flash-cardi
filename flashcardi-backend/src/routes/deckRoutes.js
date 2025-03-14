@@ -1,11 +1,13 @@
+import { addNewDeck, getAllDecks } from "../controllers/deckController";
+
 const deckRoutes = (app) => {
   app
     .route("/api/deck")
     .post((req, res) => {
-      res.status(201).send({ message: "Deck create successfully." });
+      addNewDeck(req, res);
     })
     .get((req, res) => {
-      res.status(200).send({ message: "Decks found." });
+      getAllDecks(req, res);
     });
 
   app
