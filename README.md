@@ -74,21 +74,6 @@ This repository contains the backend API for a flashcard application built with 
 * Make changes to the code in the `src` directory (or your chosen directory structure).
 * Nodemon will automatically restart the server when changes are detected.
 
-## Completed Tasks
-
-* **Day 1 (Thursday, March 13th):** Set up Node.js project, initialize npm, install Express.js.
-* **Day 2 (Friday, March 14th):** Configure MongoDB connection. Plan the data structure for the Deck and Card collections. Document the planned structure.
-* **Day 3 (Saturday, March 15th):** Create API endpoint: `GET /decks` (Get all study decks).
-* **Day 3 (Saturday, March 15th):** Create API endpoint: `POST /decks` (Create a new study deck).
-
-## Future Enhancements (Optional)
-
-* Implement user authentication.
-* Add testing with Jest or Mocha
-* Add input validation
-* Add error handling.
-* Complete all CRUD operations for decks and flashcards.
-
 ## Contributing
 
 Closed for now...
