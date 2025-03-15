@@ -1,22 +1,24 @@
-import mongoose, { mongo } from "mongoose";
+import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
 export const deckSchema = new Schema({
   title: {
     type: String,
-    required: true,
+    required: "Title of the deck is required",
   },
   description: {
     type: String,
-    required: true,
+    required: "Description of the deck is required",
   },
   createdAt: {
     type: Date,
-    required: Date.now,
+    default: Date.now,
   },
   updatedAt: {
     type: Date,
-    required: Date.now,
+    default: Date.now,
   },
 });
+
+export default mongoose.model("Deck", deckSchema, "decks");
