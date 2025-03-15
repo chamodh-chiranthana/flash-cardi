@@ -77,7 +77,3 @@ This repository contains the backend API for a flashcard application built with 
 ## Contributing
 
 Closed for now...
-
-## License
-
-[Your License (e.g., MIT)](LICENSE)
