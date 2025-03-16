@@ -3,6 +3,11 @@ import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 export const deckSchema = new Schema({
+  deckId: {
+    type: String,
+    required: true,
+    unique: true,
+  },
   title: {
     type: String,
     required: "Title of the deck is required",

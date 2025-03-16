@@ -1,4 +1,10 @@
-import { addNewDeck, getAllDecks } from "../controllers/deckController";
+import {
+  addNewDeck,
+  getAllDecks,
+  getDeckById,
+  updateDeck,
+  deleteDeck,
+} from "../controllers/deckController";
 
 const deckRoutes = (app) => {
   app
@@ -12,11 +18,14 @@ const deckRoutes = (app) => {
 
   app
     .route("/api/deck/:deckId")
+    .get((req, res) => {
+      getDeckById(req, res);
+    })
     .put((req, res) => {
-      res.status(200).send({ message: "Deck updated successfully." });
+      updateDeck(req, res);
     })
     .delete((req, res) => {
-      res.status(200).send({ message: "Decks deleted." });
+      deleteDeck(req, res);
     });
 };
 
