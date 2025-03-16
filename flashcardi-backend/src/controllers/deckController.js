@@ -4,7 +4,6 @@ export const addNewDeck = async (req, res) => {
   console.log("Request body: ", req.body);
   try {
     const newDeckId = await generateDeckId();
-    console.log("New Deck ID: ", newDeckId); // Log the new deck ID
     let newDeck = new Deck({ ...req.body, deckId: newDeckId });
     const deck = await newDeck.save();
     res.status(201).json(deck);
