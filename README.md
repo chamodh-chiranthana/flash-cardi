@@ -60,15 +60,6 @@ This repository contains the backend API for a flashcard application built with 
 
     The API will be available at `http://localhost:3000` 
 
-## API Endpoints (Current Status)
-
-* **Decks:**
-    * `GET /decks`: Get all study decks.
-    * `POST /decks`: Create a new study deck.
-    * *Future: `GET /decks/:deckId`, `PUT /decks/:deckId`, `DELETE /decks/:deckId`*
-* **Flashcards:**
-    * *Future: All flashcard related endpoints.*
-
 ## Development
 
 * Make changes to the code in the `src` directory (or your chosen directory structure).
