@@ -1,11 +1,13 @@
+import { createACard, getCardsByDeck } from "../controllers/cardController";
+
 const cardRoutes = (app) => {
   app
-    .route("/api/card")
+    .route("/api/deck/:deckId/card")
     .post((req, res) => {
-      res.status(201).send({ message: "Card create successfully." });
+      createACard(req, res);
     })
     .get((req, res) => {
-      res.status(200).send({ message: "Cards found." });
+      getCardsByDeck(req, res);
     });
 
   app
