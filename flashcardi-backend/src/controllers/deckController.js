@@ -88,7 +88,7 @@ const generateDeckId = async () => {
       );
       newCount = lastIdNumber + 1;
     }
-    return `${dateString}${String(newCount).padStart(2, "0")}`;
+    return `${dateString}D${String(newCount).padStart(2, "0")}`;
   } catch (err) {
     console.log("Error creating ID");
   }

@@ -4,9 +4,14 @@ const Schema = mongoose.Schema;
 
 export const cardSchema = new Schema({
   deckId: {
-    type: Schema.Types.ObjectId,
+    type: String,
     ref: "Deck",
     required: true,
+  },
+  cardId: {
+    type: String,
+    required: true,
+    unique: true,
   },
   frontText: {
     type: String,
@@ -25,3 +30,5 @@ export const cardSchema = new Schema({
     default: Date.now,
   },
 });
+
+export default mongoose.model("Card", cardSchema, "cards");
