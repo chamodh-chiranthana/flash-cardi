@@ -62,3 +62,55 @@ const generateCardId = async (deckId) => {
     console.log("Error creating the card.");
   }
 };
+
+export const updateACard = async (req, res) => {
+  const { deckId, cardId } = req.params;
+  // console.log(`Updating card with deckId: ${deckId} and cardId: ${cardId}`);
+
+  const deck = await Deck.findOne({ deckId: deckId });
+  if (!deck) {
+    return res.status(404).json({ message: "Deck not found." });
+  }
+
+  try {
+    // console.log(`Querying for card with deckId: ${deckId} and cardId: ${cardId}`);
+    const card = await Card.findOneAndUpdate(
+      { deckId: deckId, cardId: cardId },
+      req.body,
+      { new: true }
+    );
+
+    if (!card) {
+      console.log(`No card found with deckId: ${deckId} and cardId: ${cardId}`);
+      return res.status(404).json({ message: "Card not found." });
+    }
+
+    // console.log(`Card found and updated: ${JSON.stringify(card)}`);
+    res.status(200).json(card);
+  } catch (err) {
+    res.status(400).json({ message: "Error updating the card." });
+    console.log(err);
+  }
+};
+
+export const deleteACard = async (req, res) => {
+  const { deckId, cardId } = req.params;
+  const deck = await Deck.findOne({ deckId: deckId });
+  if (!deck) {
+    return res.status(404).json({ message: "No deck found under that ID." });
+  }
+  try {
+    const card = await Card.findOneAndDelete({
+      deckId: deckId,
+      cardId: cardId,
+    });
+    if (!card) {
+      return res.status(404).json({ message: "No card found under that ID." });
+    } else {
+      return res.status(200).json({ message: "Card found and deleted." });
+    }
+  } catch (err) {
+    res.status(400).json({ message: "An error occured when deleting a card." });
+    console.log(err);
+  }
+};
