@@ -1,4 +1,9 @@
-import { createACard, getCardsByDeck } from "../controllers/cardController";
+import {
+  createACard,
+  getCardsByDeck,
+  updateACard,
+  deleteACard,
+} from "../controllers/cardController";
 
 const cardRoutes = (app) => {
   app
@@ -11,12 +16,12 @@ const cardRoutes = (app) => {
     });
 
   app
-    .route("/api/card/:cardId")
+    .route("/api/deck/:deckId/card/:cardId")
     .put((req, res) => {
-      res.status(200).send({ message: "Card updated successfully." });
+      updateACard(req, res);
     })
     .delete((req, res) => {
-      res.status(200).send({ message: "Cards deleted." });
+      deleteACard(req, res);
     });
 };
 
