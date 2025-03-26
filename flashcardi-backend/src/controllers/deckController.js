@@ -35,7 +35,7 @@ export const getDeckById = async (req, res) => {
       res.status(404).json({ message: "hmm... deck not found." });
     }
   } catch (err) {
-    res.send(500).json({ message: "Error retrieving the deck." });
+    res.status(500).json({ message: "Error retrieving the deck." });
   }
 };
 
@@ -82,11 +82,11 @@ const generateDeckId = async () => {
       .limit(1);
     let newCount = 1;
     if (lastDeck) {
-      const lastIdNumber = parseInt(
-        lastDeck.deckId.slice(dateString.length),
-        10
-      );
-      newCount = lastIdNumber + 1;
+      const match = lastDeck.deckId.match(/D(\d+)$/);
+      if (match && match[1]) {
+        const lastIdNumber = parseInt(match[1], 10);
+        newCount = lastIdNumber + 1;
+      }
     }
     return `${dateString}D${String(newCount).padStart(2, "0")}`;
   } catch (err) {
