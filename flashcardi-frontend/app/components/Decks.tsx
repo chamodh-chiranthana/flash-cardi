@@ -1,4 +1,4 @@
-"use-client";
+"use client";
 
 import { useEffect, useState } from "react";
 import { DeckCard } from "./DeckCard";
@@ -16,18 +16,27 @@ export const Decks = () => {
   useEffect(() => {
     async function fetchDecks() {
       try {
+        console.log("Fetching decks from API...");
         const response = await fetch("http://localhost:8080/api/deck");
         if (!response.ok) {
-          console.error("Failed to fetch data.");
-          throw new Error("Failed to fetch data.");
+          const errorText = await response.text();
+          console.error(
+            `Failed to fetch data: ${response.status} ${response.statusText}`,
+            errorText
+          );
+          throw new Error(
+            `Failed to fetch data: ${response.status} ${response.statusText}`
+          );
         }
         const data: Deck[] = await response.json();
+        console.log("Fetched decks:", data);
         setDecks(data);
       } catch (err) {
+        console.error("Error fetching decks:", err);
         if (err instanceof Error) {
           setError(err);
         } else {
-          setError(new Error("An unknown error occured."));
+          setError(new Error("An unknown error occurred."));
         }
       } finally {
         setLoading(false);

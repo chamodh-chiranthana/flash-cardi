@@ -4,11 +4,14 @@ import dotenv from "dotenv";
 import bodyParser from "body-parser";
 import deckRoutes from "./src/routes/deckRoutes";
 import cardRoutes from "./src/routes/cardRoutes";
+import cors from "cors";
 
 dotenv.config();
 
 const app = express();
 const PORT = 8080;
+
+app.use(cors());
 
 mongoose.Promise = global.Promise;
 mongoose

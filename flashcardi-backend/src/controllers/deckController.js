@@ -35,7 +35,7 @@ export const getDeckById = async (req, res) => {
       res.status(404).json({ message: "hmm... deck not found." });
     }
   } catch (err) {
-    res.send(500).json({ message: "Error retrieving the deck." });
+    res.status(500).json({ message: "Error retrieving the deck." });
   }
 };
 
