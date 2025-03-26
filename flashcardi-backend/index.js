@@ -8,7 +8,7 @@ import cardRoutes from "./src/routes/cardRoutes";
 dotenv.config();
 
 const app = express();
-const PORT = 3000;
+const PORT = 8080;
 
 mongoose.Promise = global.Promise;
 mongoose
