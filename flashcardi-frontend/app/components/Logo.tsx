@@ -6,7 +6,7 @@ const rowdiesFont = Rowdies({
 
 export default function Logo() {
   return (
-    <div>
+    <div className="bg-white">
       <h1
         className={`text-center font-bold font-logo text-5xl ${rowdiesFont.className} p-10`}
       >
