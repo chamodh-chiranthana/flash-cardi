@@ -31,7 +31,7 @@ export const getCardsByDeck = async (req, res) => {
     }
     const cards = await Card.find({ deckId: deckId });
     if (cards.length === 0) {
-      res.status(404).json({ message: "No cards found for this deck." });
+      return res.status(404).json({ message: "No cards found for this deck." });
     }
     res.status(200).json(cards);
   } catch (err) {

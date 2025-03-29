@@ -1,54 +1,58 @@
 import { PlusCircleIcon } from "@heroicons/react/24/outline";
-import { useState } from "react";
 
-export const AddNewDeck = () => {
+import React, { useState } from "react";
+
+interface DeckProps {
+  deckId: string;
+}
+
+export const AddNewCard: React.FC<DeckProps> = ({ deckId }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [deckTitle, setDeckTitle] = useState("");
-  const [deckDescription, setDeckDescription] = useState("");
+  const [frontText, setFrontText] = useState("");
+  const [backText, setBackText] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   const openModal = () => setIsOpen(true);
   const closeModal = () => setIsOpen(false);
-
-  const handleCreateDeck = async () => {
+  const handlerCreateCard = async () => {
     setError(null);
     setSuccessMessage(null);
 
     try {
-      const response = await fetch("http://localhost:8080/api/deck", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          title: deckTitle,
-          description: deckDescription,
-        }),
-      });
+      const response = await fetch(
+        `http://localhost:8080/api/deck/${deckId}/card`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            frontText: frontText,
+            backText: backText,
+          }),
+        }
+      );
 
       if (response.ok) {
-        setSuccessMessage("Deck Created Successfully.");
-        setDeckTitle("");
-        setDeckDescription("");
+        setSuccessMessage("Card Created Successfully.");
+        setFrontText("");
+        setBackText("");
         closeModal();
       } else {
-        const errorData = await response.json();
-        setError(errorData.error || "Failed to create deck.");
+        const errData = await response.json();
+        setError(errData.err || "Failed to create the card...");
       }
-    } catch (error) {
-      setError("Network Error. Please try again.");
-      console.error("Error creating deck: ", error);
+    } catch (err) {
+      console.error(err);
     }
   };
 
   return (
-    <div className="mb-10">
+    <div>
       <button onClick={openModal}>
-        <div className="grid w-[270px] h-[92px] content-center px-5 border-2 border-black mt-10 rounded-xl justify-center">
-          <div>
-            <PlusCircleIcon style={{ width: 50, height: 50 }} />
-          </div>
+        <div className="grid content-center justify-center h-[250px] w-[300px] shadow-lg rounded-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1 bg-white border border-gray-300">
+          <PlusCircleIcon style={{ width: 100, height: 100 }} />
         </div>
       </button>
 
@@ -65,7 +69,7 @@ export const AddNewDeck = () => {
 
         <div className="relative w-11/12 md:w-2/3 max-w-lg bg-white shadow-md rounded-xl border border-gray-400 p-8">
           <h1 className="text-gray-800 font-lg font-bold tracking-normal leading-tight mb-4">
-            Create New Deck
+            Create New Card
           </h1>
 
           {successMessage && (
@@ -76,42 +80,43 @@ export const AddNewDeck = () => {
           <div className="space-y-4">
             <div>
               <label
-                htmlFor="name"
+                htmlFor="frontText"
                 className="text-gray-800 text-sm font-bold leading-tight tracking-normal"
               >
-                Deck Title
+                Front Text
               </label>
               <input
-                id="name"
+                type="text"
+                id="frontText"
                 className="mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border"
-                placeholder="Enter deck name"
-                value={deckTitle}
-                onChange={(e) => setDeckTitle(e.target.value)}
+                placeholder="Enter the Front Text"
+                value={frontText}
+                onChange={(e) => setFrontText(e.target.value)}
               />
             </div>
 
             <div>
               <label
-                htmlFor="description"
+                htmlFor="backText"
                 className="text-gray-800 text-sm font-bold leading-tight tracking-normal"
               >
-                Description
+                Back Text
               </label>
-              <textarea
-                id="description"
-                className="mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full p-3 text-sm border-gray-300 rounded border"
-                placeholder="Enter description"
-                rows={3}
-                value={deckDescription}
-                onChange={(e) => setDeckDescription(e.target.value)}
-              ></textarea>
+              <input
+                type="text"
+                id="backText"
+                className="mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border"
+                placeholder="Enter the Back Text"
+                value={backText}
+                onChange={(e) => setBackText(e.target.value)}
+              />
             </div>
           </div>
 
           <div className="flex items-center justify-start w-full mt-6">
             <button
               className="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700 transition duration-150 ease-in-out hover:bg-indigo-600 bg-indigo-700 rounded text-white px-8 py-2 text-sm"
-              onClick={handleCreateDeck}
+              onClick={handlerCreateCard}
             >
               Create
             </button>
