@@ -4,6 +4,16 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+
+  --card-color-1: #ef4444;
+  --card-color-2: #2e8b57;
+  --card-color-3: #ff7f50;
+  --card-color-4: #6495ed;
+  --card-color-5: #ff00ff;
+  --card-color-6: #808000;
+  --card-color-7: #cd7f32;
+  --card-color-8: #40e0d0;
+  --card-color-9: #b91c1c;
 }
 
 @theme inline {
