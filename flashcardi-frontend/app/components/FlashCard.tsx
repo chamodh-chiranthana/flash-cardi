@@ -6,7 +6,7 @@ import {
   TrashIcon,
   ExclamationTriangleIcon,
 } from "@heroicons/react/24/outline";
-import { DeckContext } from "../contexts/DeckProvider";
+import { CardContext } from "../contexts/CardProvider";
 
 interface FlashCardProps {
   card: {
@@ -29,7 +29,7 @@ export default function FlashCard({ card, colorIndex }: FlashCardProps) {
   const [deleteError, setDeleteError] = useState<string | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
-  const { updateCard, removeCard } = useContext(DeckContext);
+  const { updateCard, removeCard } = useContext(CardContext);
 
   const handleClick = () => {
     setIsFlipped((prev) => !prev);

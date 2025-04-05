@@ -1,13 +1,15 @@
 "use client";
 
 import { useContext } from "react";
+import { CardContext } from "../contexts/CardProvider";
 import { DeckContext } from "../contexts/DeckProvider";
 import { AddNewCard } from "./AddNewCard";
 import React from "react";
 import FlashCard from "./FlashCard";
 
 export default function CurrentDeck() {
-  const { selectedDeck, cards } = useContext(DeckContext);
+  const { selectedDeck } = useContext(DeckContext);
+  const { cards } = useContext(CardContext);
 
   if (!selectedDeck) {
     return (
@@ -16,6 +18,10 @@ export default function CurrentDeck() {
       </div>
     );
   }
+
+  // Filter cards that belong to the selected deck
+  const deckCards =
+    cards?.filter((card) => card.deckId === selectedDeck.deckId) || [];
 
   return (
     <div className="p-4">
@@ -32,12 +38,12 @@ export default function CurrentDeck() {
 
       <div className="mt-4">
         <h2 className="text-xl font-semibold mb-3">
-          Cards ({cards?.length || 0})
+          Cards ({deckCards.length})
         </h2>
 
-        {cards && cards.length > 0 ? (
+        {deckCards.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {cards.map((card, index) => (
+            {deckCards.map((card, index) => (
               <FlashCard key={card.cardId} card={card} colorIndex={index} />
             ))}
             <AddNewCard deckId={selectedDeck.deckId} />
