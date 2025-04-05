@@ -6,8 +6,9 @@ import {
   PencilSquareIcon,
   ExclamationTriangleIcon,
 } from "@heroicons/react/24/outline";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { DeckContext } from "../contexts/DeckProvider";
+import { CardContext } from "../contexts/CardProvider";
 
 interface DeckCardProps {
   title: string;
@@ -22,16 +23,22 @@ export const DeckCard: React.FC<DeckCardProps> = ({
 }) => {
   const [IsEditOpen, setIsEditOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [deckTitle, setDeckTitle] = useState("");
-  const [deckDescription, setDeckDescription] = useState("");
+  const [deckTitle, setDeckTitle] = useState(title);
+  const [deckDescription, setDeckDescription] = useState(description);
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [deleteError, setDeleteError] = useState<string | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
-  const { setSelectedDeck, setCards, removeDeck, updateDeck } =
-    useContext(DeckContext);
+  const [isEditing, setIsEditing] = useState(false);
 
-  // Opens the edit modal and sets initial values
+  const { setSelectedDeck, removeDeck, updateDeck } = useContext(DeckContext);
+  const { setCards } = useContext(CardContext);
+
+  useEffect(() => {
+    setDeckTitle(title);
+    setDeckDescription(description);
+  }, [title, description]);
+
   const openModal = () => {
     setDeckTitle(title);
     setDeckDescription(description);
@@ -46,7 +53,6 @@ export const DeckCard: React.FC<DeckCardProps> = ({
     setSuccessMessage(null);
   };
 
-  // Opens the delete confirmation modal
   const openDeleteModal = () => {
     setIsDeleteModalOpen(true);
     setDeleteError(null);
@@ -60,6 +66,7 @@ export const DeckCard: React.FC<DeckCardProps> = ({
   const submitDeckEdit = async () => {
     setError(null);
     setSuccessMessage("");
+    setIsEditing(true);
 
     try {
       const response = await fetch(`http://localhost:8080/api/deck/${deckId}`, {
@@ -74,14 +81,15 @@ export const DeckCard: React.FC<DeckCardProps> = ({
       });
 
       if (response.ok) {
-        // Update the deck in the context
+        const updatedDeck = await response.json();
+
         updateDeck({
           deckId,
-          title: deckTitle,
-          description: deckDescription,
+          title: updatedDeck.title || deckTitle,
+          description: updatedDeck.description || deckDescription,
         });
 
-        setSuccessMessage("Deck Edited Successfully.");
+        setSuccessMessage("Deck Updated Successfully.");
         setTimeout(() => {
           closeModal();
         }, 1500);
@@ -92,22 +100,25 @@ export const DeckCard: React.FC<DeckCardProps> = ({
     } catch (error) {
       setError("Network Error, Please try again.");
       console.error("Error updating deck: ", error);
+    } finally {
+      setIsEditing(false);
     }
   };
 
   const handleSelectDeck = async () => {
     const deck = {
-      deckId: deckId,
-      title: title,
-      description: description,
+      deckId,
+      title,
+      description,
     };
 
-    setSelectedDeck(deck);
-
     try {
+      setSelectedDeck(deck);
+
       const response = await fetch(
         `http://localhost:8080/api/deck/${deckId}/card`
       );
+
       if (!response.ok) {
         throw new Error("Failed to fetch cards from that deck.");
       }
@@ -115,7 +126,7 @@ export const DeckCard: React.FC<DeckCardProps> = ({
       const cardsData = await response.json();
       setCards(cardsData);
     } catch (err) {
-      console.log("An Error occurred fetching cards: ", err);
+      console.error("An Error occurred fetching cards: ", err);
       setCards([]);
     }
   };
@@ -130,9 +141,8 @@ export const DeckCard: React.FC<DeckCardProps> = ({
       });
 
       if (response.ok) {
-        // Short delay to show success animation
+        removeDeck(deckId);
         setTimeout(() => {
-          removeDeck(deckId);
           closeDeleteModal();
         }, 1000);
       } else {
@@ -148,7 +158,7 @@ export const DeckCard: React.FC<DeckCardProps> = ({
   };
 
   return (
-    <div className="grid w-[270px] h-[92px] content-center px-5  border-2 border-black mt-10 rounded-xl">
+    <div className="grid w-[270px] h-[92px] content-center px-5 border-2 border-black mt-10 rounded-xl">
       <div className="flex justify-between mb-3 gap-3">
         <h1 className="text-3xl">{title}</h1>
         <button onClick={handleSelectDeck}>
@@ -167,7 +177,6 @@ export const DeckCard: React.FC<DeckCardProps> = ({
           />
         </button>
 
-        {/* Edit Modal */}
         <div
           className={`fixed inset-0 z-50 flex items-center justify-center transition-opacity ${
             IsEditOpen ? "opacity-100" : "opacity-0 pointer-events-none"
@@ -225,10 +234,13 @@ export const DeckCard: React.FC<DeckCardProps> = ({
 
             <div className="flex items-center justify-start w-full mt-6">
               <button
-                className="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700 transition duration-150 ease-in-out hover:bg-indigo-600 bg-indigo-700 rounded text-white px-8 py-2 text-sm"
+                className={`focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700 transition duration-150 ease-in-out hover:bg-indigo-600 bg-indigo-700 rounded text-white px-8 py-2 text-sm ${
+                  isEditing ? "opacity-75 cursor-not-allowed" : ""
+                }`}
                 onClick={submitDeckEdit}
+                disabled={isEditing}
               >
-                Update
+                {isEditing ? "Updating..." : "Update"}
               </button>
               <button
                 className="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400 ml-3 bg-gray-100 transition duration-150 text-gray-600 ease-in-out hover:border-gray-400 hover:bg-gray-300 border rounded px-8 py-2 text-sm"
@@ -263,7 +275,6 @@ export const DeckCard: React.FC<DeckCardProps> = ({
           </div>
         </div>
 
-        {/* Delete Button */}
         <button onClick={openDeleteModal}>
           <TrashIcon
             style={{
@@ -275,7 +286,6 @@ export const DeckCard: React.FC<DeckCardProps> = ({
           />
         </button>
 
-        {/* Delete Confirmation Modal */}
         <div
           className={`fixed inset-0 z-50 flex items-center justify-center transition-opacity ${
             isDeleteModalOpen ? "opacity-100" : "opacity-0 pointer-events-none"

@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react"; // Added useContext
 import { DeckCard } from "./DeckCard";
 import { AddNewDeck } from "./AddNewDeck";
+import { DeckContext } from "../contexts/DeckProvider"; // Import DeckContext
 
 interface Deck {
   deckId: string;
@@ -11,9 +12,11 @@ interface Deck {
 }
 
 export const Decks = () => {
-  const [decks, setDecks] = useState<Deck[]>();
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error | null>(null);
+
+  // Use decks from context instead of local state
+  const { decks, setDecks } = useContext(DeckContext);
 
   useEffect(() => {
     async function fetchDecks() {
@@ -25,7 +28,7 @@ export const Decks = () => {
           );
         }
         const data: Deck[] = await response.json();
-        setDecks(data);
+        setDecks(data); // Update decks in context instead of local state
       } catch (err) {
         if (err instanceof Error) {
           setError(err);
@@ -37,7 +40,25 @@ export const Decks = () => {
       }
     }
     fetchDecks();
-  }, []);
+  }, [setDecks]);
+
+  // Set up a refresh interval to keep data in sync
+  useEffect(() => {
+    // Refresh deck data every 30 seconds
+    const refreshInterval = setInterval(async () => {
+      try {
+        const response = await fetch("http://localhost:8080/api/deck");
+        if (response.ok) {
+          const freshData: Deck[] = await response.json();
+          setDecks(freshData);
+        }
+      } catch (error) {
+        console.error("Error refreshing deck data:", error);
+      }
+    }, 30000);
+
+    return () => clearInterval(refreshInterval);
+  }, [setDecks]);
 
   if (loading) {
     return (
@@ -58,6 +79,7 @@ export const Decks = () => {
       </>
     );
   }
+
   return (
     <div className="flex flex-col items-center">
       {decks?.map((deck) => (

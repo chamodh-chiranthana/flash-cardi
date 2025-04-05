@@ -2,7 +2,7 @@
 
 import React, { useContext, useState, useEffect } from "react";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
-import { DeckContext } from "../contexts/DeckProvider";
+import { CardContext } from "../contexts/CardProvider";
 
 export default function CardModals() {
   const {
@@ -13,7 +13,7 @@ export default function CardModals() {
     closeCardDeleteModal,
     updateCard,
     removeCard,
-  } = useContext(DeckContext);
+  } = useContext(CardContext);
 
   const [frontText, setFrontText] = useState("");
   const [backText, setBackText] = useState("");
