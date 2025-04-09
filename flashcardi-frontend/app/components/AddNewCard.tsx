@@ -1,12 +1,15 @@
 import { PlusCircleIcon } from "@heroicons/react/24/outline";
-
 import React, { useState } from "react";
 
 interface DeckProps {
   deckId: string;
+  isMobile?: boolean;
 }
 
-export const AddNewCard: React.FC<DeckProps> = ({ deckId }) => {
+export const AddNewCard: React.FC<DeckProps> = ({
+  deckId,
+  isMobile = false,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const [frontText, setFrontText] = useState("");
   const [backText, setBackText] = useState("");
@@ -49,10 +52,29 @@ export const AddNewCard: React.FC<DeckProps> = ({ deckId }) => {
   };
 
   return (
-    <div>
-      <button onClick={openModal}>
-        <div className="grid content-center justify-center h-[250px] w-[300px] shadow-lg rounded-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1 bg-white border border-gray-300">
-          <PlusCircleIcon style={{ width: 100, height: 100 }} />
+    <div className="w-full">
+      <button onClick={openModal} className="w-full">
+        <div
+          className={`
+          shadow-lg rounded-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1 bg-white border border-gray-300
+          ${isMobile ? "h-[180px] w-full" : "h-[250px] w-[300px]"}
+          flex flex-col items-center justify-center
+        `}
+          style={{
+            perspective: "1000px",
+          }}
+        >
+          <PlusCircleIcon
+            className="text-indigo-500"
+            style={{ width: isMobile ? 60 : 80, height: isMobile ? 60 : 80 }}
+          />
+          <p
+            className={`mt-4 text-indigo-700 font-medium ${
+              isMobile ? "text-sm" : "text-base"
+            }`}
+          >
+            Add New Card
+          </p>
         </div>
       </button>
 
@@ -102,11 +124,11 @@ export const AddNewCard: React.FC<DeckProps> = ({ deckId }) => {
               >
                 Back Text
               </label>
-              <input
-                type="text"
+              <textarea
                 id="backText"
-                className="mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border"
+                className="mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full p-3 text-sm border-gray-300 rounded border"
                 placeholder="Enter the Back Text"
+                rows={3}
                 value={backText}
                 onChange={(e) => setBackText(e.target.value)}
               />

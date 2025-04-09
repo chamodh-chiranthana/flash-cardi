@@ -169,7 +169,9 @@ export default function CardModals() {
 
           <div className="flex items-center justify-start w-full mt-6">
             <button
-              className="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700 transition duration-150 ease-in-out hover:bg-indigo-600 bg-indigo-700 rounded text-white px-8 py-2 text-sm"
+              className={`focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700 transition duration-150 ease-in-out hover:bg-indigo-600 bg-indigo-700 rounded text-white px-8 py-2 text-sm ${
+                isUpdating ? "opacity-75 cursor-not-allowed" : ""
+              }`}
               onClick={submitCardEdit}
             >
               Update
@@ -237,13 +239,6 @@ export default function CardModals() {
 
           <div className="flex items-center justify-center space-x-4">
             <button
-              className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-400"
-              onClick={closeCardDeleteModal}
-              disabled={isDeleting === editingCard.cardId}
-            >
-              Cancel
-            </button>
-            <button
               className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors focus:outline-none focus:ring-2 focus:ring-red-500"
               onClick={deleteCard}
               disabled={isDeleting === editingCard.cardId}
@@ -253,6 +248,13 @@ export default function CardModals() {
               ) : (
                 "Delete"
               )}
+            </button>
+            <button
+              className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-400"
+              onClick={closeCardDeleteModal}
+              disabled={isDeleting === editingCard.cardId}
+            >
+              Cancel
             </button>
           </div>
         </div>

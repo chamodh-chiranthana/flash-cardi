@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useState, useContext } from "react"; // Added useContext
+import { useEffect, useState, useContext } from "react";
 import { DeckCard } from "./DeckCard";
 import { AddNewDeck } from "./AddNewDeck";
-import { DeckContext } from "../contexts/DeckProvider"; // Import DeckContext
+import { DeckContext } from "../contexts/DeckProvider";
 
 interface Deck {
   deckId: string;
@@ -11,11 +11,15 @@ interface Deck {
   description: string;
 }
 
-export const Decks = () => {
+interface DecksProps {
+  isMobile?: boolean;
+}
+
+export const Decks = ({ isMobile = false }: DecksProps) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error | null>(null);
 
-  // Use decks from context instead of local state
+  // Use decks from context
   const { decks, setDecks } = useContext(DeckContext);
 
   useEffect(() => {
@@ -28,7 +32,7 @@ export const Decks = () => {
           );
         }
         const data: Deck[] = await response.json();
-        setDecks(data); // Update decks in context instead of local state
+        setDecks(data);
       } catch (err) {
         if (err instanceof Error) {
           setError(err);
@@ -40,24 +44,6 @@ export const Decks = () => {
       }
     }
     fetchDecks();
-  }, [setDecks]);
-
-  // Set up a refresh interval to keep data in sync
-  useEffect(() => {
-    // Refresh deck data every 30 seconds
-    const refreshInterval = setInterval(async () => {
-      try {
-        const response = await fetch("http://localhost:8080/api/deck");
-        if (response.ok) {
-          const freshData: Deck[] = await response.json();
-          setDecks(freshData);
-        }
-      } catch (error) {
-        console.error("Error refreshing deck data:", error);
-      }
-    }, 30000);
-
-    return () => clearInterval(refreshInterval);
   }, [setDecks]);
 
   if (loading) {
@@ -81,16 +67,84 @@ export const Decks = () => {
   }
 
   return (
-    <div className="flex flex-col items-center">
-      {decks?.map((deck) => (
-        <DeckCard
-          key={deck.deckId}
-          title={deck.title}
-          deckId={deck.deckId}
-          description={deck.description}
-        />
-      ))}
-      <AddNewDeck />
+    <div
+      className={`${
+        isMobile
+          ? "flex flex-col h-[180px] w-full"
+          : "flex flex-col items-center w-full py-4" /* Column layout with spacing */
+      }`}
+    >
+      {/* Title for deck section */}
+      <h2
+        className={`font-bold text-xl self-start mt-5 ${
+          isMobile ? "px-2 mb-1" : "px-4 mb-2"
+        }`}
+      >
+        Your Decks
+      </h2>
+
+      <div
+        className={`${
+          isMobile
+            ? "flex flex-row items-center py-2 px-1 overflow-x-auto overflow-y-hidden w-full flex-1"
+            : "flex flex-col items-center w-full space-y-4" /* Column layout with spacing */
+        } custom-scrollbar`}
+        style={{
+          scrollbarWidth: "thin",
+          scrollbarColor: "var(--sidebar-background) transparent",
+        }}
+      >
+        <style jsx global>{`
+          .custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+          }
+          .custom-scrollbar::-webkit-scrollbar-thumb {
+            background-color: #e8f5e9; /* Hardcoded color for better compatibility */
+            border-radius: 4px;
+          }
+          .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+          }
+          /* Firefox */
+          .custom-scrollbar {
+            scrollbar-width: thin;
+            scrollbar-color: #e8f5e9 transparent;
+          }
+        `}</style>
+
+        {isMobile ? (
+          <>
+            {decks?.map((deck) => (
+              <DeckCard
+                key={deck.deckId}
+                title={deck.title}
+                deckId={deck.deckId}
+                description={deck.description}
+                isMobile={isMobile}
+              />
+            ))}
+            <div className="min-w-[80px] h-[140px] flex-shrink-0 flex items-center">
+              <AddNewDeck isMobile={isMobile} />
+            </div>
+          </>
+        ) : (
+          <>
+            {decks?.map((deck) => (
+              <DeckCard
+                key={deck.deckId}
+                title={deck.title}
+                deckId={deck.deckId}
+                description={deck.description}
+                isMobile={isMobile}
+              />
+            ))}
+            <div className="w-full max-w-md flex-shrink-0">
+              <AddNewDeck isMobile={isMobile} />
+            </div>
+          </>
+        )}
+      </div>
     </div>
   );
 };
