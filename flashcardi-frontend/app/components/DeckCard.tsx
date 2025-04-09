@@ -13,12 +13,14 @@ interface DeckCardProps {
   title: string;
   deckId: string;
   description: string;
+  isMobile: boolean;
 }
 
 export const DeckCard: React.FC<DeckCardProps> = ({
   title,
   deckId,
   description,
+  isMobile,
 }) => {
   const [IsEditOpen, setIsEditOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -147,20 +149,49 @@ export const DeckCard: React.FC<DeckCardProps> = ({
     }
   };
 
+  if (isMobile) {
+    return (
+      <div className="min-w-[60px] h-full flex flex-col justify-center mx-2 border-2 border-black rounded-lg">
+        <div className="flex flex-col items-center h-full">
+          <div className="flex-1 flex items-center justify-center">
+            <h2 className="vertical-text text-sm font-medium px-1 py-2">
+              {title}
+            </h2>
+          </div>
+          <div className="p-1">
+            <button
+              onClick={handleSelectDeck}
+              className="p-1 bg-white rounded-full"
+              aria-label="Select deck"
+            >
+              <ArrowRightCircleIcon style={{ height: 20, width: 20 }} />
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
+<<<<<<< Updated upstream
     <div className="grid w-[270px] h-[92px] content-center px-5  border-2 border-black mt-10 rounded-xl">
       <div className="flex justify-between mb-3 gap-3">
         <h1 className="text-3xl">{title}</h1>
+=======
+    <div className="w-full max-w-[270px] min-w-[200px] h-[92px] content-center px-4 border-2 border-black mt-6 rounded-xl mx-auto">
+      <div className="flex justify-between mb-2 gap-2 items-center mt-2">
+        <h1 className="text-2xl truncate">{title}</h1>
+>>>>>>> Stashed changes
         <button onClick={handleSelectDeck}>
-          <ArrowRightCircleIcon style={{ height: 35, width: 35 }} />
+          <ArrowRightCircleIcon style={{ height: 28, width: 28 }} />
         </button>
       </div>
       <div className="flex gap-2">
         <button onClick={openModal}>
           <PencilSquareIcon
             style={{
-              height: 30,
-              width: 30,
+              height: 26,
+              width: 26,
               border: "2px solid",
               borderRadius: 5,
             }}

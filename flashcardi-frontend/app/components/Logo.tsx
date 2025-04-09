@@ -8,7 +8,9 @@ export default function Logo() {
   return (
     <div className="bg-white">
       <h1
-        className={`text-center font-bold font-logo text-5xl ${rowdiesFont.className} p-10`}
+        className={`text-center font-bold font-logo ${rowdiesFont.className} 
+          text-4xl xs:text-5xl sm:text-4xl md:text-4xl lg:text-5xl xl:text-5xl 
+          p-5 xs:p-6 sm:p-5 md:p-6 lg:p-8 xl:p-10`}
       >
         <span className="text-red-500 logo-gradient">F</span>
         <span className="text-[#FFD700]">l</span>
