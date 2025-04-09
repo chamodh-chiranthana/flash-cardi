@@ -1,6 +1,14 @@
+"use client";
+
 import React, { useState } from "react";
 
-export const NewDeckOverlay = () => {
+interface NewDeckOverlayProps {
+  isMobile?: boolean;
+}
+
+export const NewDeckOverlay: React.FC<NewDeckOverlayProps> = ({
+  isMobile = false,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const openModal = () => setIsOpen(true);
@@ -9,21 +17,29 @@ export const NewDeckOverlay = () => {
   return (
     <div>
       <div
-        className={`py-12 bg-gray-700 transition duration-150 ease-in-out z-10 absolute top-0 right-0 bottom-0 left-0 ${
+        className={`py-12 bg-black/50 backdrop-blur-sm transition duration-150 ease-in-out z-10 absolute top-0 right-0 bottom-0 left-0 ${
           isOpen ? "block" : "hidden"
         }`}
       >
         <div
           role="alert"
-          className="container mx-auto w-11/12 md:w-2/3 max-w-lg"
+          className={`container mx-auto ${
+            isMobile ? "w-5/6" : "w-11/12 md:w-2/3 max-w-lg"
+          }`}
         >
-          <div className="relative py-8 px-5 md:px-10 bg-white shadow-md rounded border border-gray-400">
+          <div
+            className={`relative ${
+              isMobile ? "py-6 px-4" : "py-8 px-5 md:px-10"
+            } bg-white shadow-md rounded border border-gray-400`}
+          >
             <div className="w-full flex justify-start text-gray-600 mb-3">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="icon icon-tabler icon-tabler-wallet"
-                width="52"
-                height="52"
+                className={`icon icon-tabler icon-tabler-wallet ${
+                  isMobile ? "w-10 h-10" : "w-13 h-13"
+                }`}
+                width={isMobile ? "42" : "52"}
+                height={isMobile ? "42" : "52"}
                 viewBox="0 0 24 24"
                 strokeWidth="1"
                 stroke="currentColor"
@@ -36,7 +52,11 @@ export const NewDeckOverlay = () => {
                 <path d="M20 12v4h-4a2 2 0 0 1 0 -4h4" />
               </svg>
             </div>
-            <h1 className="text-gray-800 font-lg font-bold tracking-normal leading-tight mb-4">
+            <h1
+              className={`text-gray-800 font-lg font-bold tracking-normal leading-tight ${
+                isMobile ? "mb-3 text-lg" : "mb-4"
+              }`}
+            >
               Create New Deck
             </h1>
             <label
@@ -47,7 +67,9 @@ export const NewDeckOverlay = () => {
             </label>
             <input
               id="name"
-              className="mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border"
+              className={`${
+                isMobile ? "mb-4" : "mb-5"
+              } mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border`}
               placeholder="Enter deck name"
             />
 
@@ -59,17 +81,25 @@ export const NewDeckOverlay = () => {
             </label>
             <textarea
               id="description"
-              className="mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full p-3 text-sm border-gray-300 rounded border"
+              className={`${
+                isMobile ? "mb-4" : "mb-5"
+              } mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full p-3 text-sm border-gray-300 rounded border`}
               placeholder="Enter description"
-              rows={3}
+              rows={isMobile ? 2 : 3}
             ></textarea>
 
             <div className="flex items-center justify-start w-full">
-              <button className="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700 transition duration-150 ease-in-out hover:bg-indigo-600 bg-indigo-700 rounded text-white px-8 py-2 text-sm">
+              <button
+                className={`focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700 transition duration-150 ease-in-out hover:bg-indigo-600 bg-indigo-700 rounded text-white ${
+                  isMobile ? "px-6 py-1.5 text-xs" : "px-8 py-2 text-sm"
+                }`}
+              >
                 Create
               </button>
               <button
-                className="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400 ml-3 bg-gray-100 transition duration-150 text-gray-600 ease-in-out hover:border-gray-400 hover:bg-gray-300 border rounded px-8 py-2 text-sm"
+                className={`focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400 ml-3 bg-gray-100 transition duration-150 text-gray-600 ease-in-out hover:border-gray-400 hover:bg-gray-300 border rounded ${
+                  isMobile ? "px-6 py-1.5 text-xs" : "px-8 py-2 text-sm"
+                }`}
                 onClick={closeModal}
               >
                 Cancel
@@ -100,9 +130,15 @@ export const NewDeckOverlay = () => {
           </div>
         </div>
       </div>
-      <div className="w-full flex justify-center py-12">
+      <div
+        className={`w-full flex justify-center ${isMobile ? "py-6" : "py-12"}`}
+      >
         <button
-          className="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700 mx-auto transition duration-150 ease-in-out hover:bg-indigo-600 bg-indigo-700 rounded text-white px-4 sm:px-8 py-2 text-xs sm:text-sm"
+          className={`focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700 mx-auto transition duration-150 ease-in-out hover:bg-indigo-600 bg-indigo-700 rounded text-white ${
+            isMobile
+              ? "px-3 py-1.5 text-xs"
+              : "px-4 sm:px-8 py-2 text-xs sm:text-sm"
+          }`}
           onClick={openModal}
         >
           Create New Deck

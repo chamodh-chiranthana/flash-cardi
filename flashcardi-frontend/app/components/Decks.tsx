@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useState, useContext } from "react"; // Added useContext
+import { useEffect, useState, useContext } from "react";
 import { DeckCard } from "./DeckCard";
 import { AddNewDeck } from "./AddNewDeck";
-import { DeckContext } from "../contexts/DeckProvider"; // Import DeckContext
+import { DeckContext } from "../contexts/DeckProvider";
 
 interface Deck {
   deckId: string;
@@ -11,7 +11,11 @@ interface Deck {
   description: string;
 }
 
-export const Decks = () => {
+interface DecksProps {
+  isMobile?: boolean;
+}
+
+export const Decks = ({ isMobile = false }: DecksProps) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error | null>(null);
 
@@ -81,16 +85,41 @@ export const Decks = () => {
   }
 
   return (
-    <div className="flex flex-col items-center">
-      {decks?.map((deck) => (
-        <DeckCard
-          key={deck.deckId}
-          title={deck.title}
-          deckId={deck.deckId}
-          description={deck.description}
-        />
-      ))}
-      <AddNewDeck />
+    <div
+      className={`${
+        isMobile
+          ? "flex flex-row h-[180px] items-center py-2 px-1 overflow-x-auto overflow-y-hidden w-full"
+          : "flex flex-col items-center w-full py-4 space-y-4" /* Column layout with spacing */
+      }`}
+      style={{ scrollbarWidth: "thin" }}
+    >
+      {isMobile ? (
+        <>
+          {decks?.map((deck) => (
+            <DeckCard
+              key={deck.deckId}
+              title={deck.title}
+              deckId={deck.deckId}
+              description={deck.description}
+              isMobile={isMobile}
+            />
+          ))}
+          <AddNewDeck isMobile={isMobile} />
+        </>
+      ) : (
+        <>
+          {decks?.map((deck) => (
+            <DeckCard
+              key={deck.deckId}
+              title={deck.title}
+              deckId={deck.deckId}
+              description={deck.description}
+              isMobile={isMobile}
+            />
+          ))}
+          <AddNewDeck isMobile={isMobile} />
+        </>
+      )}
     </div>
   );
 };

@@ -4,7 +4,11 @@ import React, { useContext, useState, useEffect } from "react";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import { CardContext } from "../contexts/CardProvider";
 
-export default function CardModals() {
+interface CardModalsProps {
+  isMobile?: boolean;
+}
+
+export default function CardModals({ isMobile = false }: CardModalsProps) {
   const {
     editingCard,
     isEditCardModalOpen,
@@ -21,6 +25,7 @@ export default function CardModals() {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [deleteError, setDeleteError] = useState<string | null>(null);
   const [isDeleting, setIsDeleting] = useState<string | null>(null);
+  const [isUpdating, setIsUpdating] = useState(false);
 
   // Set up the form when the editing card changes
   useEffect(() => {
@@ -38,6 +43,7 @@ export default function CardModals() {
 
     setError(null);
     setSuccessMessage(null);
+    setIsUpdating(true);
 
     try {
       const response = await fetch(
@@ -71,6 +77,8 @@ export default function CardModals() {
     } catch (err) {
       setError("Network error, please try again.");
       console.error("Error updating card: ", err);
+    } finally {
+      setIsUpdating(false);
     }
   };
 
@@ -122,8 +130,16 @@ export default function CardModals() {
           onClick={closeCardEditModal}
         ></div>
 
-        <div className="relative w-11/12 md:w-2/3 max-w-lg bg-white shadow-md rounded-xl border border-gray-400 p-8">
-          <h1 className="text-gray-800 font-lg font-bold tracking-normal leading-tight mb-4">
+        <div
+          className={`relative ${
+            isMobile ? "w-5/6 p-5" : "w-11/12 md:w-2/3 max-w-lg p-8"
+          } bg-white shadow-md rounded-xl border border-gray-400`}
+        >
+          <h1
+            className={`text-gray-800 font-lg font-bold tracking-normal leading-tight ${
+              isMobile ? "mb-3 text-lg" : "mb-4"
+            }`}
+          >
             Edit the Card
           </h1>
 
@@ -160,7 +176,7 @@ export default function CardModals() {
                 id="back-text"
                 className="mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full p-3 text-sm border-gray-300 rounded border"
                 placeholder="Enter back text"
-                rows={3}
+                rows={isMobile ? 2 : 3}
                 value={backText}
                 onChange={(e) => setBackText(e.target.value)}
               ></textarea>
@@ -169,14 +185,20 @@ export default function CardModals() {
 
           <div className="flex items-center justify-start w-full mt-6">
             <button
-              className="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700 transition duration-150 ease-in-out hover:bg-indigo-600 bg-indigo-700 rounded text-white px-8 py-2 text-sm"
+              className={`focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700 transition duration-150 ease-in-out hover:bg-indigo-600 bg-indigo-700 rounded text-white ${
+                isMobile ? "px-6 py-1.5 text-xs" : "px-8 py-2 text-sm"
+              } ${isUpdating ? "opacity-75 cursor-not-allowed" : ""}`}
               onClick={submitCardEdit}
+              disabled={isUpdating}
             >
-              Update
+              {isUpdating ? "Updating..." : "Update"}
             </button>
             <button
-              className="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400 ml-3 bg-gray-100 transition duration-150 text-gray-600 ease-in-out hover:border-gray-400 hover:bg-gray-300 border rounded px-8 py-2 text-sm"
+              className={`focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400 ml-3 bg-gray-100 transition duration-150 text-gray-600 ease-in-out hover:border-gray-400 hover:bg-gray-300 border rounded ${
+                isMobile ? "px-6 py-1.5 text-xs" : "px-8 py-2 text-sm"
+              }`}
               onClick={closeCardEditModal}
+              disabled={isUpdating}
             >
               Cancel
             </button>
@@ -186,6 +208,7 @@ export default function CardModals() {
             className="cursor-pointer absolute top-0 right-0 mt-4 mr-5 text-gray-400 hover:text-gray-600 transition duration-150 ease-in-out rounded focus:ring-2 focus:outline-none focus:ring-gray-600"
             onClick={closeCardEditModal}
             aria-label="close modal"
+            disabled={isUpdating}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -220,13 +243,25 @@ export default function CardModals() {
           onClick={closeCardDeleteModal}
         ></div>
 
-        <div className="relative w-11/12 md:w-96 max-w-md bg-white shadow-md rounded-xl border border-gray-400 p-6 text-center">
+        <div
+          className={`relative ${
+            isMobile ? "w-5/6 p-4" : "w-11/12 md:w-96 max-w-md p-6"
+          } bg-white shadow-md rounded-xl border border-gray-400 text-center`}
+        >
           <div className="flex justify-center mb-4">
-            <ExclamationTriangleIcon className="h-12 w-12 text-red-500" />
+            <ExclamationTriangleIcon
+              className={`${isMobile ? "h-10 w-10" : "h-12 w-12"} text-red-500`}
+            />
           </div>
 
-          <h2 className="text-xl font-bold text-gray-900 mb-2">Delete Card</h2>
-          <p className="text-gray-600 mb-6">
+          <h2
+            className={`${
+              isMobile ? "text-lg" : "text-xl"
+            } font-bold text-gray-900 mb-2`}
+          >
+            Delete Card
+          </h2>
+          <p className={`text-gray-600 ${isMobile ? "mb-4 text-sm" : "mb-6"}`}>
             Are you sure you want to delete this card? This action cannot be
             undone.
           </p>
@@ -237,14 +272,18 @@ export default function CardModals() {
 
           <div className="flex items-center justify-center space-x-4">
             <button
-              className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-400"
+              className={`px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-400 ${
+                isMobile ? "text-sm" : ""
+              }`}
               onClick={closeCardDeleteModal}
               disabled={isDeleting === editingCard.cardId}
             >
               Cancel
             </button>
             <button
-              className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors focus:outline-none focus:ring-2 focus:ring-red-500"
+              className={`px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors focus:outline-none focus:ring-2 focus:ring-red-500 ${
+                isMobile ? "text-sm" : ""
+              }`}
               onClick={deleteCard}
               disabled={isDeleting === editingCard.cardId}
             >
