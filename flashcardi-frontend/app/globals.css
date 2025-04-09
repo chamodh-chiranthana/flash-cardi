@@ -2,8 +2,9 @@
 @import url("https://fonts.googleapis.com/css2?family=Rowdies:wght@300;400;700&display=swap");
 
 :root {
-  --background: #ffffff;
+  --background: #e0f2f7;
   --foreground: #171717;
+  --sidebar-background: #e8f5e9;
 
   --card-color-1: #ef4444;
   --card-color-2: #2e8b57;

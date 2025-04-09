@@ -1,11 +1,7 @@
 "use client";
 
-<<<<<<< Updated upstream
-import { useContext } from "react";
-=======
 import { useContext, useState } from "react";
 import { CardContext } from "../contexts/CardProvider";
->>>>>>> Stashed changes
 import { DeckContext } from "../contexts/DeckProvider";
 import { AddNewCard } from "./AddNewCard";
 import React from "react";
@@ -16,10 +12,6 @@ import {
   ExclamationTriangleIcon,
 } from "@heroicons/react/24/outline";
 
-<<<<<<< Updated upstream
-export default function CurrentDeck() {
-  const { selectedDeck, cards } = useContext(DeckContext);
-=======
 interface CurrentDeckProps {
   isMobile?: boolean;
 }
@@ -28,7 +20,6 @@ export default function CurrentDeck({ isMobile = false }: CurrentDeckProps) {
   const { selectedDeck, updateDeck, removeDeck, setSelectedDeck } =
     useContext(DeckContext);
   const { cards } = useContext(CardContext);
->>>>>>> Stashed changes
 
   // States for edit functionality
   const [isEditOpen, setIsEditOpen] = useState(false);
@@ -49,8 +40,6 @@ export default function CurrentDeck({ isMobile = false }: CurrentDeckProps) {
     );
   }
 
-<<<<<<< Updated upstream
-=======
   // Initialize state values from selected deck
   const openModal = () => {
     setDeckTitle(selectedDeck.title);
@@ -162,7 +151,6 @@ export default function CurrentDeck({ isMobile = false }: CurrentDeckProps) {
   const deckCards =
     cards?.filter((card) => card.deckId === selectedDeck.deckId) || [];
 
->>>>>>> Stashed changes
   return (
     <div className={`${isMobile ? "p-2" : "p-4"} w-full`}>
       {/* Title area with edit/delete buttons on mobile */}
@@ -204,17 +192,6 @@ export default function CurrentDeck({ isMobile = false }: CurrentDeckProps) {
         </p>
       )}
 
-<<<<<<< Updated upstream
-      <div className="mt-4">
-        <h2 className="text-xl font-semibold mb-3">
-          Cards ({cards?.length || 0})
-        </h2>
-
-        {cards && cards.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {cards.map((card, index) => (
-              <FlashCard key={card.cardId} card={card} colorIndex={index} />
-=======
       <div className={`${isMobile ? "mt-2" : "mt-4"}`}>
         <h2
           className={`${
@@ -242,15 +219,15 @@ export default function CurrentDeck({ isMobile = false }: CurrentDeckProps) {
               <div key={card.cardId} className="flex justify-center">
                 <FlashCard card={card} colorIndex={index} isMobile={isMobile} />
               </div>
->>>>>>> Stashed changes
             ))}
             <div className="flex items-center justify-center">
               <AddNewCard deckId={selectedDeck.deckId} isMobile={isMobile} />
             </div>
           </div>
         ) : (
-          <div className="p-4 border rounded-md text-center text-gray-500">
-            No cards in this deck yet
+          <div className="p-6 rounded-md text-center flex flex-col items-center justify-center gap-4">
+            <p className="text-gray-500">No cards in this deck yet</p>
+            <AddNewCard deckId={selectedDeck.deckId} isMobile={isMobile} />
           </div>
         )}
       </div>
@@ -382,13 +359,6 @@ export default function CurrentDeck({ isMobile = false }: CurrentDeckProps) {
 
           <div className="flex items-center justify-center space-x-4">
             <button
-              className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-400"
-              onClick={closeDeleteModal}
-              disabled={isDeleting}
-            >
-              Cancel
-            </button>
-            <button
               className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors focus:outline-none focus:ring-2 focus:ring-red-500"
               onClick={handleDeleteDeck}
               disabled={isDeleting}
@@ -398,6 +368,13 @@ export default function CurrentDeck({ isMobile = false }: CurrentDeckProps) {
               ) : (
                 "Delete"
               )}
+            </button>
+            <button
+              className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-400"
+              onClick={closeDeleteModal}
+              disabled={isDeleting}
+            >
+              Cancel
             </button>
           </div>
         </div>
