@@ -3,6 +3,7 @@
 import React, { useContext, useState, useEffect } from "react";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import { CardContext } from "../contexts/CardProvider";
+import { API_BASE_URL } from "../config/api";
 
 export default function CardModals() {
   const {
@@ -43,7 +44,7 @@ export default function CardModals() {
 
     try {
       const response = await fetch(
-        `http://localhost:8080/api/deck/${editingCard.deckId}/card/${editingCard.cardId}`,
+        `${API_BASE_URL}/deck/${editingCard.deckId}/card/${editingCard.cardId}`,
         {
           method: "PUT",
           headers: {
@@ -86,7 +87,7 @@ export default function CardModals() {
 
     try {
       const response = await fetch(
-        `http://localhost:8080/api/deck/${editingCard.deckId}/card/${editingCard.cardId}`,
+        `${API_BASE_URL}/deck/${editingCard.deckId}/card/${editingCard.cardId}`,
         {
           method: "DELETE",
         }

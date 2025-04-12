@@ -1,5 +1,6 @@
 import { PlusCircleIcon } from "@heroicons/react/24/outline";
 import React, { useState } from "react";
+import { API_BASE_URL } from "../config/api";
 
 interface DeckProps {
   deckId: string;
@@ -23,19 +24,16 @@ export const AddNewCard: React.FC<DeckProps> = ({
     setSuccessMessage(null);
 
     try {
-      const response = await fetch(
-        `http://localhost:8080/api/deck/${deckId}/card`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            frontText: frontText,
-            backText: backText,
-          }),
-        }
-      );
+      const response = await fetch(`${API_BASE_URL}/deck/${deckId}/card`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          frontText: frontText,
+          backText: backText,
+        }),
+      });
 
       if (response.ok) {
         setSuccessMessage("Card Created Successfully.");

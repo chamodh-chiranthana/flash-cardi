@@ -4,6 +4,7 @@ import { useEffect, useState, useContext } from "react";
 import { DeckCard } from "./DeckCard";
 import { AddNewDeck } from "./AddNewDeck";
 import { DeckContext } from "../contexts/DeckProvider";
+import { API_BASE_URL } from "../config/api";
 
 interface Deck {
   deckId: string;
@@ -25,7 +26,7 @@ export const Decks = ({ isMobile = false }: DecksProps) => {
   useEffect(() => {
     async function fetchDecks() {
       try {
-        const response = await fetch("http://localhost:8080/api/deck");
+        const response = await fetch(`${API_BASE_URL}/deck`);
         if (!response.ok) {
           throw new Error(
             `Failed to fetch data: ${response.status} ${response.statusText}`

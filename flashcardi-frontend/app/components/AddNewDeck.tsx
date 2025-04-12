@@ -3,6 +3,7 @@
 import { PlusCircleIcon } from "@heroicons/react/24/outline";
 import { useState, useContext } from "react";
 import { DeckContext } from "../contexts/DeckProvider";
+import { API_BASE_URL } from "../config/api";
 
 interface AddNewDeckProps {
   isMobile?: boolean;
@@ -32,7 +33,7 @@ export const AddNewDeck = ({ isMobile = false }: AddNewDeckProps) => {
     setIsCreating(true);
 
     try {
-      const response = await fetch("http://localhost:8080/api/deck", {
+      const response = await fetch(`${API_BASE_URL}/deck`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -46,7 +47,7 @@ export const AddNewDeck = ({ isMobile = false }: AddNewDeckProps) => {
       if (response.ok) {
         // Refresh the decks list
         try {
-          const decksResponse = await fetch("http://localhost:8080/api/deck");
+          const decksResponse = await fetch(`${API_BASE_URL}/deck`);
           if (decksResponse.ok) {
             const decksData = await decksResponse.json();
             setDecks(decksData);

@@ -7,6 +7,7 @@ import {
 import { useContext, CSSProperties, useState, useMemo } from "react";
 import { DeckContext } from "../contexts/DeckProvider";
 import { CardContext } from "../contexts/CardProvider";
+import { API_BASE_URL } from "../config/api";
 
 // Normal text style for desktop view
 const normalTextStyle: CSSProperties = {
@@ -87,9 +88,7 @@ export const DeckCard: React.FC<DeckCardProps> = ({
     setSelectedDeck(deck);
 
     try {
-      const response = await fetch(
-        `http://localhost:8080/api/deck/${deckId}/card`
-      );
+      const response = await fetch(`${API_BASE_URL}/deck/${deckId}/card`);
       if (!response.ok) {
         throw new Error("Failed to fetch cards from that deck.");
       }
