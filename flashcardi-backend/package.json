@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon ./index.js --exec babel-node"
+    "start": "nodemon ./index.js --exec babel-node",
+    "build": "babel . --ignore node_modules,build --out-dir build",
+    "vercel-build": "echo 'Building the backend'"
   },
   "keywords": [],
   "author": "",
