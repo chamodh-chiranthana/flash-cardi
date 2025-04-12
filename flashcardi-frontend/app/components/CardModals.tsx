@@ -21,6 +21,7 @@ export default function CardModals() {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [deleteError, setDeleteError] = useState<string | null>(null);
   const [isDeleting, setIsDeleting] = useState<string | null>(null);
+  const [isUpdating, setIsUpdating] = useState(false);
 
   // Set up the form when the editing card changes
   useEffect(() => {
@@ -38,6 +39,7 @@ export default function CardModals() {
 
     setError(null);
     setSuccessMessage(null);
+    setIsUpdating(true);
 
     try {
       const response = await fetch(
@@ -71,6 +73,8 @@ export default function CardModals() {
     } catch (err) {
       setError("Network error, please try again.");
       console.error("Error updating card: ", err);
+    } finally {
+      setIsUpdating(false);
     }
   };
 
