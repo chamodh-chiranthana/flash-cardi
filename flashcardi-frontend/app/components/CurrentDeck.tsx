@@ -124,7 +124,7 @@ export default function CurrentDeck({ isMobile = false }: CurrentDeckProps) {
 
     try {
       const response = await fetch(
-        `${API_BASE_URL}/api/deck/${selectedDeck.deckId}`,
+        `${API_BASE_URL}/deck/${selectedDeck.deckId}`,
         {
           method: "DELETE",
         }
