@@ -6,6 +6,7 @@ import { DeckContext } from "../contexts/DeckProvider";
 import { AddNewCard } from "./AddNewCard";
 import React from "react";
 import FlashCard from "./FlashCard";
+import { API_BASE_URL } from "../config/api";
 import {
   PencilSquareIcon,
   TrashIcon,
@@ -72,7 +73,7 @@ export default function CurrentDeck({ isMobile = false }: CurrentDeckProps) {
 
     try {
       const response = await fetch(
-        `http://localhost:8080/api/deck/${selectedDeck.deckId}`,
+        `${API_BASE_URL}/deck/${selectedDeck.deckId}`,
         {
           method: "PUT",
           headers: {
@@ -123,7 +124,7 @@ export default function CurrentDeck({ isMobile = false }: CurrentDeckProps) {
 
     try {
       const response = await fetch(
-        `http://localhost:8080/api/deck/${selectedDeck.deckId}`,
+        `${API_BASE_URL}/api/deck/${selectedDeck.deckId}`,
         {
           method: "DELETE",
         }
@@ -153,11 +154,11 @@ export default function CurrentDeck({ isMobile = false }: CurrentDeckProps) {
 
   return (
     <div className={`${isMobile ? "p-2" : "p-4"} w-full`}>
-      {/* Title area with edit/delete buttons on mobile */}
+      {/* Title area with edit/delete buttons */}
       <div
         className={`flex ${
-          isMobile ? "items-center justify-between mb-2" : "mb-4"
-        }`}
+          isMobile ? "items-center mb-2" : "items-center mb-4"
+        } justify-between`}
       >
         <h1
           className={`font-bold ${isMobile ? "text-xl" : "text-2xl"}`}
@@ -166,24 +167,30 @@ export default function CurrentDeck({ isMobile = false }: CurrentDeckProps) {
           {selectedDeck.title}
         </h1>
 
-        {isMobile && (
-          <div className="flex gap-2">
-            <button
-              onClick={openModal}
-              className="p-1.5 bg-blue-100 rounded-md"
-              aria-label="Edit deck"
-            >
-              <PencilSquareIcon className="h-5 w-5 text-blue-600" />
-            </button>
-            <button
-              onClick={openDeleteModal}
-              className="p-1.5 bg-red-100 rounded-md"
-              aria-label="Delete deck"
-            >
-              <TrashIcon className="h-5 w-5 text-red-600" />
-            </button>
-          </div>
-        )}
+        <div className="flex gap-2">
+          <button
+            onClick={openModal}
+            className={`${
+              isMobile ? "p-1.5" : "p-2"
+            } bg-blue-100 rounded-md hover:bg-blue-200 transition-colors`}
+            aria-label="Edit deck"
+          >
+            <PencilSquareIcon
+              className={`${isMobile ? "h-5 w-5" : "h-6 w-6"} text-blue-600`}
+            />
+          </button>
+          <button
+            onClick={openDeleteModal}
+            className={`${
+              isMobile ? "p-1.5" : "p-2"
+            } bg-red-100 rounded-md hover:bg-red-200 transition-colors`}
+            aria-label="Delete deck"
+          >
+            <TrashIcon
+              className={`${isMobile ? "h-5 w-5" : "h-6 w-6"} text-red-600`}
+            />
+          </button>
+        </div>
       </div>
 
       {selectedDeck.description && (
